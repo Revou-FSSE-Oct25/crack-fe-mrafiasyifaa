@@ -18,7 +18,7 @@ export default async function proxy(req: NextRequest) {
   }
 
   if (pathname === "/" || isPublic) {
-    const destination = role === "ADMIN_VPRS" ? "/admin/dashboard" : "/doctor/dashboard";
+    const destination = role === "ADMIN_PPRA" ? "/admin/dashboard" : "/doctor/dashboard";
     return NextResponse.redirect(new URL(destination, req.url));
   }
 
@@ -26,7 +26,7 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/admin/dashboard", req.url));
   }
 
-  if (pathname.startsWith(ADMIN_PREFIX) && role !== "ADMIN_VPRS") {
+  if (pathname.startsWith(ADMIN_PREFIX) && role !== "ADMIN_PPRA") {
     return NextResponse.redirect(new URL("/doctor/dashboard", req.url));
   }
 

@@ -1,4 +1,4 @@
-export type Role = "DOCTOR" | "ADMIN_VPRS";
+export type Role = "DOCTOR" | "ADMIN_PPRA";
 export type PatientGender = "LAKI_LAKI" | "PEREMPUAN";
 export type PatientCondition = "STABIL" | "MEMBAIK" | "MEMBURUK" | "SELESAI";
 export type AntibioticCategory = "KOMERSIAL" | "DIAWASI" | "RISET";
