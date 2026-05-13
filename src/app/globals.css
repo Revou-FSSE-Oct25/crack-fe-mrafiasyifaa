@@ -7,6 +7,17 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* AMS Brand Colors */
+  --color-ams-red: #D40011;
+  --color-ams-red-secondary: #FA4353;
+  --color-ams-blue: #2980FF;
+  --color-ams-gray: #EFEFEF;
+  --color-ams-white: #F8F8F8;
+  --color-ams-black: #0D0D0D;
+  --color-ams-green: #45C62C;
+  --color-ams-orange: #FB9D12;
+  --color-ams-orange-light: #F9F1D9;
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
@@ -49,7 +60,7 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
+  --background: #EFEFEF;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
