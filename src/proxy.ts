@@ -23,11 +23,11 @@ export default async function proxy(req: NextRequest) {
   }
 
   if (pathname.startsWith(DOCTOR_PREFIX) && role !== "DOCTOR") {
-    return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    return NextResponse.redirect(new URL("/unauthorized", req.url));
   }
 
   if (pathname.startsWith(ADMIN_PREFIX) && role !== "ADMIN_PPRA") {
-    return NextResponse.redirect(new URL("/doctor/dashboard", req.url));
+    return NextResponse.redirect(new URL("/unauthorized", req.url));
   }
 
   return NextResponse.next();

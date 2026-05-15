@@ -4,11 +4,13 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("access_token");
+  const t = localStorage.getItem("access_token");
+  if (!t || t === "undefined" || t === "null") return null;
+  return t;
 }
 
 interface FetchOptions extends RequestInit {
-  params?: Record<string, string>;
+  params?: Record<string, string | string[]>;
 }
 
 async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
@@ -16,7 +18,13 @@ async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promis
 
   const url = new URL(`${BASE_URL}${endpoint}`);
   if (params) {
-    Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+    Object.entries(params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) => url.searchParams.append(key, v));
+      } else {
+        url.searchParams.set(key, value);
+      }
+    });
   }
 
   const token = getToken();
@@ -31,8 +39,16 @@ async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promis
   });
 
   if (!res.ok) {
-    const error: ApiError = await res.json();
-    throw error;
+    const body: ApiError = await res.json().catch(() => ({ message: `HTTP ${res.status}` }));
+    if (res.status === 401 && !endpoint.startsWith("/auth")) {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("auth-storage");
+      document.cookie = "access_token=; path=/; max-age=0";
+      document.cookie = "user_role=; path=/; max-age=0";
+      window.location.href = "/login";
+      return undefined as T;
+    }
+    throw new Error(body.message ?? `HTTP ${res.status}`);
   }
 
   if (res.status === 204) return undefined as T;
@@ -40,7 +56,7 @@ async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promis
 }
 
 export const api = {
-  get: <T>(endpoint: string, params?: Record<string, string>) =>
+  get: <T>(endpoint: string, params?: Record<string, string | string[]>) =>
     fetchApi<T>(endpoint, { method: "GET", params }),
 
   post: <T>(endpoint: string, body?: unknown) =>
