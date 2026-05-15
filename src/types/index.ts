@@ -4,7 +4,7 @@ export type PatientCondition = "STABIL" | "MEMBAIK" | "MEMBURUK" | "SELESAI";
 export type AntibioticCategory = "KOMERSIAL" | "DIAWASI" | "RISET";
 export type AntibioticForm = "TABLET" | "KAPSUL" | "SIRUP" | "INJEKSI" | "SALEP" | "INFUS";
 export type RequestStatus = "PENDING" | "APPROVED" | "REJECTED";
-export type NotificationType = "REQUEST_BARU" | "REQUEST_DISETUJUI" | "REQUEST_DITOLAK";
+export type NotificationType = "REQUEST_BARU" | "REQUEST_DISETUJUI" | "REQUEST_DITOLAK" | "ANTIBIOTIC_KADALUARSA";
 
 export interface User {
   id: string;
@@ -14,7 +14,7 @@ export interface User {
 }
 
 export interface AuthResponse {
-  access_token: string;
+  token: string;
   user: User;
 }
 
@@ -27,6 +27,7 @@ export interface Patient {
   address: string;
   diagnosis: string;
   condition: PatientCondition;
+  isActive: boolean;
   doctor?: Pick<User, "id" | "name" | "email">;
   conditionLogs?: ConditionLog[];
 }
@@ -99,6 +100,16 @@ export interface Notification {
   isRead: boolean;
   referenceId: string;
   createdAt: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 export interface ApiError {
