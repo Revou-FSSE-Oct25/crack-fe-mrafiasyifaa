@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${jakarta.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-(family-name:--font-jakarta)">
+      <body suppressHydrationWarning className="min-h-full flex flex-col font-(family-name:--font-jakarta)">
         <Providers>{children}</Providers>
       </body>
     </html>
