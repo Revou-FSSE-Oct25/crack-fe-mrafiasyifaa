@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,7 +50,7 @@ const requestSchema = z.object({
 
 type RequestForm = z.infer<typeof requestSchema>;
 
-export default function NewRequestPage() {
+function NewRequestContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const prefillPatientId = searchParams.get("patientId");
@@ -400,5 +400,13 @@ export default function NewRequestPage() {
         </Button>
       </form>
     </div>
+  );
+}
+
+export default function NewRequestPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><Loader2 className="w-5 h-5 animate-spin text-ams-red" /></div>}>
+      <NewRequestContent />
+    </Suspense>
   );
 }

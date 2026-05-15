@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -22,7 +22,7 @@ const filters: { label: string; value: RequestStatus | "ALL" | "UNCLAIMED" }[] =
   { label: "Ditolak", value: "REJECTED" },
 ];
 
-export default function AdminRequestsPage() {
+function AdminRequestsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [requests, setRequests] = useState<AntibioticRequest[]>([]);
@@ -115,5 +115,13 @@ export default function AdminRequestsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function AdminRequestsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-40"><Loader2 className="w-5 h-5 animate-spin text-ams-red" /></div>}>
+      <AdminRequestsContent />
+    </Suspense>
   );
 }
